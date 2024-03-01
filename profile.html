@@ -10,11 +10,11 @@
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 
-    <title>Form</title>
+    <title>MojoAuth Demo | Secure and Delightful Passwordless Login Solution</title>
 
     <script charset="UTF-8" src="https://devmicrocenter.mojoauth.com/cdn/js/mojoauth.min.js"></script>
 </head>
-<body>
+<body onload="checkSession()">
 <section class="_form_05">
     <div class="container">
         <div class="row">
@@ -24,8 +24,8 @@
                             <div class="form-05-box-a">
                                 <div class="_form_05_logo">
                                     <h2 style="color: #6efc6e;">Authentication Successful</h2>
-                                    <p id="tok" style="word-wrap: break-word;">
-                                        eyJhbGciOiJSUzI1NiIsImtpZCI6Il9XUHB6bUdWIiwidHlwIjoiSldUIn0.eyJpZGVudGlmaWVyIjoibmV3dGtla2RAbWFpbDcuaW8iLCJ1c2VyX2lkIjoiNjVhOGM4MWI1ODgxODY4ODliMWM1OWUzIiwiYXV0aF90eXBlIjoibWFnaWNsaW5rIiwidG9rZW5fdHlwZSI6ImFjY2Vzc190b2tlbiIsImF1ZCI6IjQxZjA1ZDM4LTdkNWYtNGE4ZC05NGVlLTQ1Mzk0NTJhZTE2NyIsImV4cCI6MTcwNTgxOTI5MSwianRpIjoiMDRkZDI4ZjQtOWU3MS00ZTJjLTk2YjYtNzUyOGZkMTcwNzczIiwiaWF0IjoxNzA1NTYwMDkxLCJpc3MiOiJodHRwczovL3d3dy5tb2pvYXV0aC5jb20iLCJuYmYiOjE3MDU1NjAwODYsInN1YiI6IjY1YThjODFiNTg4MTg2ODg5YjFjNTllMyJ9.54RMStuAvf5VAg0GMuuGR5k3cwDAR_sbOlqcrVe6TFxaljDiEfVxg0AWpL2_X1jyirLHg3haf9IkcDDiA1TYlkwuaShQJm4T7ViHibqnsm9L1ibW5rHl5nrIWN-aNPbk5a9KFvRKLEjNTYFAjXvbRwCBBEVFyTs0iJVaiXEnvMUUQtdEk-58U3GIt8ZcNyo8WPxaG2jHJs1m2rc2cXFtpvPuiba4sKTAh73micq1OpQElXAiqo6IkbAd5mIpA_ko_bCCAHbWp790rMWkeXuhBPaLN8UADFz3w0JsgnaEbXnItgFxyYx2cc601WNbY3G5y5AYRfMxCZzgytklc-399g</p>
+                                    <p id="tok" style="word-wrap: break-word;"></p>\
+                                    <button class="logoutbutton _btn_04" style="display: block; margin-top: -5%; background-color: #f1416c;" onclick="clearSession()">Logout</button>
                                 </div>
                             </div>
                         </div>
@@ -46,32 +46,10 @@
                                 <th>Action</th>
                             </tr>
                         </table>
+                        <div id="nodata" style="text-align: center;">
+                                
                         </div>
-                        <!-- <div class="col-sm-7 _nb-pl">
-                          <div class="_mn_df">
-                            <div class="main-head">
-                              <h2>Welcome to MojoAuth</h2>
-                            </div>
-
-                            <div class="form-group">
-                              <input type="email" name="email" class="form-control" type="text" placeholder="Email / Phone" required="" aria-required="true">
-                            </div>
-
-
-
-                            <div class="form-group">
-                              <div class="_btn_04">
-                                <a href="#">One Click Sign in</a>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="_btn_04" style="background-color: #091e16;">
-                                <a href="#">Sign in with a Passkey</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div> -->
-                    
+                        </div>
                 </div>
             </div>
         </div>
@@ -88,6 +66,12 @@
     document.getElementById("tok").innerHTML = identifier;
 
     const mojoauth = new MojoAuth("test-d00a21fd-d46e-46ed-b4ed-b80b20b4a4f6");
+
+    function checkSession() {
+        if (!sessionStorage.getItem("access_token") || !sessionStorage.getItem("identifier")){
+            window.location.href="/"
+        }
+    }
 
     mojoauth.getPasskeyCredentials(accessToken).then(response => {
         console.log(response);
@@ -133,6 +117,12 @@
         mojoauth.registerPasskey(identifier, accessToken).then(response => {
             console.log(response);
         });
+    }
+
+    function clearSession() {
+        sessionStorage.removeItem("access_token"); 
+        sessionStorage.removeItem("identifier"); 
+        window.location.href="/"
     }
 
     function handleRenameCred(id) {
